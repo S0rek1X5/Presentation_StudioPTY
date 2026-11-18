@@ -1,28 +1,65 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
 ---
 
-<Layout>
-    <header>
-        <div class="sm:flex flex-row justify-between items-center p-4 bg-black md:text-sm text-white">
-            <a href="#inicio">
+
+
+<div id="intro-wrapper" class="relative h-[200svh]">
+    <section class="sticky top-0 h-svh overflow-hidden">
+        <Layout>
+            <div class="flex flex-col bg-black text-white h-screen justify-center w-full">
+                <div class="flex flex-col p-10">
+                    <h2 class="sm:text-sm italic font-light">Presentation StudioPTY</h2>
+                    <h1 class="sm:text-4xl font-bold italic display:block sm:w-3xl my-10" data-es="“Transformamos ideas en experiencias visuales extraordinarias, capturando cada detalle, cada proyecto merece una perspectiva única, cada momento merece ser recordado y cada historia merece ser contada de una manera inolvidable.”"
+                        data-en="We transform ideas into extraordinary visual experiences, capturing every detail; every project deserves a unique perspective, every moment deserves to be remembered, and every story deserves to be told in an unforgettable way.">
+                        “Transformamos ideas en experiencias visuales extraordinarias, capturando cada detalle, cada proyecto merece una perspectiva única, cada momento merece ser recordado y cada historia merece ser contada de una manera inolvidable.”</h1>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col bg-black h-screen w-full">
+                <div class="flex flex-col items-center p-5 text-white">
+                    <h2 class="sm:text-sm italic font-light">
+                        Presentation Studio PTY</h2>
+                    <h1 class="sm:text-4xl font-bold italic display:block sm:w-3xl my-10" data-es="“Transformamos ideas en experiencias visuales”"
+                        data-en="Services">
+                        Servicios</h1>
+                </div>
+            </div>
+        </Layout>
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="intro-curtain" class="absolute top-0 left-0 z-[100] h-svh w-full bg-black flex flex-col justify-center items-center">
+        <img src="/logo.png" alt="Presentation Studio PTY Logo" class="w-28 h-28 md:w-36 md:h-36 object-contain" />
+        <h1 class="mt-6 text-white text-3xl md:text-5xl font-bold tracking-wide text-center italic ">
             Presentation Studio PTY
-            </a>
-
-            <nav>
-                <a href="#producciones" class="inline-flex items-center justify-center bg-transparent hover:bg-gray-200 hover:text-black   px-4 py-1 transition-colors">Producciones</a>
-                <a href="#servicios" class="inline-flex items-center justify-center bg-transparent hover:bg-gray-200 hover:text-black    px-4 py-1 transition-colors">Servicios</a>
-                <a href="#contacto" class="inline-flex items-center justify-center bg-transparent hover:bg-gray-200 hover:text-black   px-4 py-1 transition-colors">Contacto</a>
-            </nav>
-        </div>
-    </header>
-
-    
-    <div class="flex flex-col bg-black text-white h-screen justify-center w-full">
-        <div class="flex flex-col ">
-            <h2 class="sm:text-xl font-semibold">Presentation_StudioPTY</h2>
-            <h1 class="sm:text-9xl font-bold  display: inline w-5xl">Tus producciones con estilo</h1>
+        </h1>
+        <div class="absolute bottom-10 flex flex-col items-center gap-3 text-white animate-bounce">
+            <span class="text-sm tracking-[0.3em] uppercase">Scroll to see</span>
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                width="24" height="24" viewBox="0 0 24 24" 
+                fill="none" stroke="currentColor" stroke-width="1.5" 
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14" />
+                <path d="m19 12-7 7-7-7" />
+            </svg>
         </div>
     </div>
-    
-</Layout>
+</div>

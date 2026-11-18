@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 ---
 
 
@@ -15,6 +16,7 @@ import Footer from '../components/Footer.astro';
 		<title>Presentation_StudioPTY</title>
 	</head>
 	<body class="flex flex-col min-h-screen bg-gray-50 text-gray-900 antialiased">
+		<Header/>
 		<main class="">
       		<slot />
     	</main>
@@ -22,6 +24,9 @@ import Footer from '../components/Footer.astro';
 	</body>
 	
 </html>
+
+<script src="../scripts/language.js"></script>
+<script src="../scripts/curtain.js"></script>
 
 <style>
 	html,
