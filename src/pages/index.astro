@@ -1,16 +1,28 @@
 ---
+import Layout from "../layouts/Layout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+    <header>
+        <div class="sm:flex flex-row justify-between items-center p-4 bg-black md:text-sm text-white">
+            <a href="#inicio">
+            Presentation Studio PTY
+            </a>
+
+            <nav>
+                <a href="#producciones" class="inline-flex items-center justify-center bg-transparent hover:bg-gray-200 hover:text-black   px-4 py-1 transition-colors">Producciones</a>
+                <a href="#servicios" class="inline-flex items-center justify-center bg-transparent hover:bg-gray-200 hover:text-black    px-4 py-1 transition-colors">Servicios</a>
+                <a href="#contacto" class="inline-flex items-center justify-center bg-transparent hover:bg-gray-200 hover:text-black   px-4 py-1 transition-colors">Contacto</a>
+            </nav>
+        </div>
+    </header>
+
+    
+    <div class="flex flex-col bg-black text-white h-screen justify-center w-full">
+        <div class="flex flex-col ">
+            <h2 class="sm:text-xl font-semibold">Presentation_StudioPTY</h2>
+            <h1 class="sm:text-9xl font-bold  display: inline w-5xl">Tus producciones con estilo</h1>
+        </div>
+    </div>
+    
+</Layout>
