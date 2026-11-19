@@ -1,0 +1,222 @@
+---
+/**
+ * Carrusel de producciones (Astro + Tailwind).
+ * Para agregar contenido, solo edita este arreglo:
+ *  - type: "image" | "video"
+ *  - src: ruta del archivo (ej. "/producciones/spot-01.jpg" o "/producciones/spot-01.mp4")
+ *  - poster: (solo videos) imagen que se ve mientras carga el video
+ *  - alt: descripción de la imagen (accesibilidad)
+ *  - title: título en español e inglés
+ * Los archivos van en la carpeta /public de tu proyecto.
+ * Mientras "src" esté vacío, la tarjeta se muestra en blanco.
+ */
+const producciones = [
+  { type: "image", src: "", alt: "", title: { es: "Producción 1", en: "Production 1" } },
+  { type: "video", src: "", poster: "", title: { es: "Producción 2", en: "Production 2" } },
+  { type: "image", src: "", alt: "", title: { es: "Producción 3", en: "Production 3" } },
+  { type: "video", src: "", poster: "", title: { es: "Producción 4", en: "Production 4" } },
+  { type: "image", src: "", alt: "", title: { es: "Producción 5", en: "Production 5" } },
+  { type: "video", src: "", poster: "", title: { es: "Producción 6", en: "Production 6" } },
+  { type: "image", src: "", alt: "", title: { es: "Producción 7", en: "Production 7" } },
+  { type: "video", src: "", poster: "", title: { es: "Producción 8", en: "Production 8" } },
+];
+---
+
+<div class="w-full pb-12" data-carousel>
+  <div
+    data-track
+    role="region"
+    aria-label="Producciones"
+    tabindex="0"
+    class="relative flex gap-5 overflow-x-auto px-10 cursor-grab
+           snap-x snap-mandatory scroll-smooth
+           [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+           focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white
+           motion-reduce:scroll-auto
+           data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none"
+  >
+    {
+      producciones.map((p) => (
+        <article
+          data-card
+          tabindex="0"
+          class="group relative shrink-0 w-[min(85vw,40rem)] aspect-video overflow-hidden rounded-lg
+                 bg-[#16262f] text-white snap-start
+                 focus-visible:outline-2 focus-visible:outline-offset-[3px] focus-visible:outline-white"
+        >
+          {p.src && p.type === "image" && (
+            <img
+              src={p.src}
+              alt={p.alt || p.title.es}
+              loading="lazy"
+              draggable="false"
+              class="block w-full h-full object-cover pointer-events-none select-none"
+            />
+          )}
+          {p.src && p.type === "video" && (
+            <video
+              src={p.src}
+              poster={p.poster || undefined}
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              aria-label={p.title.es}
+              class="block w-full h-full object-cover pointer-events-none select-none"
+            />
+          )}
+
+          <div
+            class="absolute inset-x-0 bottom-0 px-5 pb-5 pt-12 pointer-events-none
+                   bg-[linear-gradient(to_top,rgb(0_0_0/0.85),transparent)]
+                   opacity-0 translate-y-2 transition duration-300 motion-reduce:transition-none
+                   group-hover:opacity-100 group-hover:translate-y-0
+                   group-focus-visible:opacity-100 group-focus-visible:translate-y-0
+                   group-data-[active]:opacity-100 group-data-[active]:translate-y-0"
+          >
+            <h3 class="m-0 text-xl font-bold italic" data-es={p.title.es} data-en={p.title.en}>
+              {p.title.es}
+            </h3>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <!-- Barra de progreso -->
+  <div class="mx-10 mt-6 h-0.5 overflow-hidden bg-white/20" aria-hidden="true">
+    <span data-bar class="block h-full w-full origin-left bg-white will-change-transform"></span>
+  </div>
+</div>
+
+<script>
+  function initCarousel(root: HTMLElement) {
+    const track = root.querySelector<HTMLElement>("[data-track]")!;
+    const bar = root.querySelector<HTMLElement>("[data-bar]")!;
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-card]"));
+    const videos = Array.from(root.querySelectorAll<HTMLVideoElement>("video"));
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canHover = window.matchMedia("(hover: hover)").matches;
+
+    const AUTOPLAY_EVERY = 5000; // ms entre avances automáticos (súbelo para hacerlo más lento)
+    const IDLE_BEFORE_RESUME = 4000; // ms sin tocar antes de que retome solo
+
+    const padLeft = () => parseFloat(getComputedStyle(track).paddingLeft) || 0;
+    const step = () => (cards[1] ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth);
+    const currentIndex = () => Math.round(track.scrollLeft / step());
+    const goTo = (i: number) => {
+      const target = cards[Math.max(0, Math.min(i, cards.length - 1))];
+      track.scrollTo({ left: target.offsetLeft - padLeft(), behavior: "smooth" });
+    };
+
+    /* ---------- Arrastre con mouse (en touch el scroll nativo ya funciona) ---------- */
+    let dragging = false;
+    let startX = 0;
+    let startScroll = 0;
+    let moved = 0;
+    let lastInteraction = 0;
+    const touched = () => (lastInteraction = Date.now());
+
+    track.addEventListener("pointerdown", (e) => {
+      touched();
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      dragging = true;
+      moved = 0;
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.setAttribute("data-dragging", "");
+    });
+    window.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      moved = Math.max(moved, Math.abs(dx));
+      track.scrollLeft = startScroll - dx;
+    });
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      track.removeAttribute("data-dragging");
+      goTo(currentIndex());
+      touched();
+    };
+    window.addEventListener("pointerup", endDrag);
+    window.addEventListener("pointercancel", endDrag);
+
+    track.addEventListener("wheel", touched, { passive: true });
+    track.addEventListener("touchstart", touched, { passive: true });
+    track.addEventListener("pointerenter", touched);
+    track.addEventListener("focusin", touched);
+
+    /* ---------- Título al tocar (pantallas táctiles) ---------- */
+    root.addEventListener(
+      "click",
+      (e) => {
+        if (moved > 5) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved = 0;
+          return;
+        }
+        if (canHover) return;
+        const card = (e.target as HTMLElement).closest<HTMLElement>("[data-card]");
+        cards.forEach((c) => c !== card && c.removeAttribute("data-active"));
+        if (card) {
+          if (card.hasAttribute("data-active")) card.removeAttribute("data-active");
+          else card.setAttribute("data-active", "");
+        }
+      },
+      true
+    );
+
+    /* ---------- Teclado: flechas izquierda/derecha ---------- */
+    track.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); goTo(currentIndex() + 1); touched(); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); goTo(currentIndex() - 1); touched(); }
+    });
+
+    /* ---------- Barra de progreso ---------- */
+    let ticking = false;
+    const updateBar = () => {
+      ticking = false;
+      const max = track.scrollWidth - track.clientWidth;
+      const visible = track.clientWidth / track.scrollWidth;
+      const progress = max > 0 ? track.scrollLeft / max : 0;
+      bar.style.transform = `translateX(${progress * (1 - visible) * (100 / visible)}%) scaleX(${visible})`;
+    };
+    track.addEventListener("scroll", () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(updateBar); }
+    }, { passive: true });
+    window.addEventListener("resize", updateBar);
+    updateBar();
+
+    /* ---------- Videos: reproducir solo los visibles, siempre en silencio ---------- */
+    if (videos.length) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const v = entry.target as HTMLVideoElement;
+            if (entry.isIntersecting) v.play().catch(() => {});
+            else v.pause();
+          });
+        },
+        { root: track, threshold: 0.4 }
+      );
+      videos.forEach((v) => { v.muted = true; io.observe(v); });
+    }
+
+    /* ---------- Avance automático lento ---------- */
+    if (!reduceMotion) {
+      let inView = false;
+      new IntersectionObserver(([entry]) => (inView = entry.isIntersecting), { threshold: 0.3 }).observe(root);
+
+      setInterval(() => {
+        if (!inView || document.hidden || dragging) return;
+        if (Date.now() - lastInteraction < IDLE_BEFORE_RESUME) return;
+        const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+        goTo(atEnd ? 0 : currentIndex() + 1);
+      }, AUTOPLAY_EVERY);
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-carousel]").forEach(initCarousel);
+</script>

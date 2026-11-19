@@ -16,7 +16,9 @@ import Header from '../components/Header.astro';
 		<title>Presentation_StudioPTY</title>
 	</head>
 	<body class="flex flex-col min-h-screen bg-gray-50 text-gray-900 antialiased">
-		<Header/>
+		<div id="main-header" class="fixed top-0 left-0 w-full z-[110] opacity-0 pointer-events-none transition-opacity duration-700">
+			<Header />
+		</div>
 		<main class="">
       		<slot />
     	</main>
