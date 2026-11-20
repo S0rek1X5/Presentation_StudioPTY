@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ProduccionesCarousel from "../components/ProduccionesCarousel.astro";
+import ProduccionesHero from "../components/ProduccionesHero.astro";
 ---
 
 <Layout>
@@ -8,8 +9,8 @@ import ProduccionesCarousel from "../components/ProduccionesCarousel.astro";
         <section class="sticky top-0 h-svh overflow-hidden">
             <div class="flex flex-col bg-black text-white h-screen justify-center w-full">
                 <div class="flex flex-col p-10">
-                    <h2 class="sm:text-sm italic font-light">Presentation StudioPTY</h2>
-                    <h1 class="sm:text-4xl font-bold italic display:block sm:w-3xl my-10" data-es="“Transformamos ideas en experiencias visuales extraordinarias, capturando cada detalle, cada proyecto merece una perspectiva única, cada momento merece ser recordado y cada historia merece ser contada de una manera inolvidable.”"
+                    <h2 class="sm:text-sm italic font-light font-display">Presentation StudioPTY</h2>
+                    <h1 class="sm:text-4xl font-bold italic font-display sm:w-3xl my-10" data-es="“Transformamos ideas en experiencias visuales extraordinarias, capturando cada detalle, cada proyecto merece una perspectiva única, cada momento merece ser recordado y cada historia merece ser contada de una manera inolvidable.”"
                         data-en="We transform ideas into extraordinary visual experiences, capturing every detail; every project deserves a unique perspective, every moment deserves to be remembered, and every story deserves to be told in an unforgettable way.">
                         “Transformamos ideas en experiencias visuales extraordinarias, capturando cada detalle, cada proyecto merece una perspectiva única, cada momento merece ser recordado y cada historia merece ser contada de una manera inolvidable.”
                     </h1>
@@ -19,7 +20,7 @@ import ProduccionesCarousel from "../components/ProduccionesCarousel.astro";
 
         <div id="intro-curtain" class="absolute top-0 left-0 z-[100] h-svh w-full bg-black flex flex-col justify-center items-center">
             <img src="/logo.png" alt="Presentation Studio PTY Logo" class="w-28 h-28 md:w-36 md:h-36 object-contain" />
-            <h1 class="mt-6 text-white text-3xl md:text-5xl font-bold tracking-wide text-center italic">
+            <h1 class="mt-6 text-white text-3xl md:text-5xl font-display font-bold tracking-wide text-center italic">
                 Presentation Studio PTY
             </h1>
             <div class="absolute bottom-10 flex flex-col items-center gap-3 text-white animate-bounce">
@@ -36,18 +37,19 @@ import ProduccionesCarousel from "../components/ProduccionesCarousel.astro";
     </div>
 
     <section id="producciones" class="flex flex-col bg-black min-h-screen w-full">
+        <ProduccionesHero />
         <div class="flex flex-col items-start p-5 mt-10">
             <div class="w-full h-px bg-white/30"></div>
             <div class="flex flex-row items-start justify-between w-full p-5 mt-10">
                 <div class="flex flex-col items-start text-white">   
-                    <h2 class="sm:text-sm italic font-normal">
+                    <h2 class="sm:text-sm italic font-display">
                         Presentation Studio PTY
                     </h2>
-                    <h1 class="sm:text-4xl font-bold italic my-10" data-es="Producciones" data-en="Productions">
+                    <h1 class="sm:text-4xl font-bold italic font-display my-10" data-es="Producciones" data-en="Productions">
                         Producciones
                     </h1>
                 </div>
-                <div class="sm:text-sm italic font-normal display:block sm:w-md text-white">
+                <div class="sm:text-md italic font-display display:block sm:w-md text-white">
                     <p data-es="En Presentation Studio PTY, nos especializamos en la creación de producciones audiovisuales de alta calidad que capturan la esencia de cada proyecto. Nuestro equipo de expertos combina creatividad, tecnología y pasión para ofrecer resultados excepcionales que superan las expectativas de nuestros clientes."
                         data-en="At Presentation Studio PTY, we specialize in creating high-quality audiovisual productions that capture the essence of each project. Our team of experts combines creativity, technology, and passion to deliver exceptional results that exceed our clients' expectations.">
                         En Presentation Studio PTY, nos especializamos en la creación de producciones audiovisuales de alta calidad que capturan la esencia de cada proyecto. Nuestro equipo de expertos combina creatividad, tecnología y pasión para ofrecer resultados excepcionales que superan las expectativas de nuestros clientes.
@@ -60,15 +62,56 @@ import ProduccionesCarousel from "../components/ProduccionesCarousel.astro";
     </section> 
 
     <section id="servicios" class="flex flex-col bg-black min-h-screen w-full">
-        <div class="flex flex-col items-center p-5 mt-10 text-white">
-            <h2 class="sm:text-sm italic font-light">
-                Presentation Studio PTY
-            </h2>
-            <h1 class="sm:text-4xl font-bold italic my-10" data-es="Servicios" data-en="Services">
-                Servicios
-            </h1>
+    <div class="flex flex-col items-center p-5 mt-10 text-white">
+        <h2 class="sm:text-sm italic font-light font-display">
+            Presentation Studio PTY
+        </h2>
+        <h1 class="sm:text-4xl font-bold italic font-display my-10" data-es="Servicios" data-en="Services">
+            Servicios
+        </h1>
+    </div>
+
+    <!-- Tabla de servicios: 2 columnas x 3 filas, solo líneas horizontales -->
+    <div class="flex flex-col w-full max-w-5xl mx-auto px-5 pb-20 text-white">
+
+        <div class="relative grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-x-10 gap-y-2 px-6 py-8
+                    border-y border-white/30 bg-black
+                    transition duration-300 ease-out
+                    hover:z-10 hover:scale-[1.03] hover:border-white hover:bg-white/5">
+            <h3 class="text-xl font-bold italic font-display" data-es="Videos" data-en="Videos">Videos</h3>
+            <p class="text-white/70 font-display"
+               data-es="Grabación de voces en off, jingles, diseño sonoro, mezcla y masterización para cuñas de radio o spots"
+               data-en="Voice-over recording, jingles, sound design, mixing and mastering for radio spots and ads">
+                Grabación de voces en off, jingles, diseño sonoro, mezcla y masterización para cuñas de radio o spots
+            </p>
         </div>
-    </section>
+
+        <div class="relative -mt-px grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-x-10 gap-y-2 px-6 py-8
+                    border-y border-white/30 bg-black
+                    transition duration-300 ease-out
+                    hover:z-10 hover:scale-[1.03] hover:border-white hover:bg-white/5">
+            <h3 class="text-xl font-bold italic font-display" data-es="Comerciales" data-en="Commercials">Comerciales</h3>
+            <p class="text-white/70 font-display"
+               data-es="Producción de anuncios de alto impacto para televisión, cine y plataformas digitales (YouTube, redes sociales)"
+               data-en="High-impact ad production for television, cinema and digital platforms (YouTube, social media)">
+                Producción de anuncios de alto impacto para televisión, cine y plataformas digitales (YouTube, redes sociales)
+            </p>
+        </div>
+
+        <div class="relative -mt-px grid grid-cols-1 sm:grid-cols-[1fr_2fr] gap-x-10 gap-y-2 px-6 py-8
+                    border-y border-white/30 bg-black
+                    transition duration-300 ease-out
+                    hover:z-10 hover:scale-[1.03] hover:border-white hover:bg-white/5">
+            <h3 class="text-xl font-bold italic font-display" data-es="Fotos" data-en="Photos">Fotos</h3>
+            <p class="text-white/70 font-display"
+               data-es="Sesiones de producto (e-commerce y catálogos), fotografía gastronómica, arquitectónica y retratos ejecutivos"
+               data-en="Product shoots (e-commerce and catalogs), food and architectural photography, and executive portraits">
+                Sesiones de producto (e-commerce y catálogos), fotografía gastronómica, arquitectónica y retratos ejecutivos
+            </p>
+        </div>
+
+    </div>
+</section>
 </Layout>
 
 <script>

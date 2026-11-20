@@ -1,0 +1,118 @@
+---
+/**
+ * Video de apertura de la sección Producciones.
+ * Empieza en tamaño pequeño-mediano y crece con el scroll hasta cubrir toda la pantalla.
+ *  - src: ruta del video en /public (ej. "/producciones/hero.mp4"). Siempre en silencio.
+ *  - poster: imagen que se ve mientras carga el video (opcional)
+ *  - title: texto que aparece en el centro
+ * Mientras "src" esté vacío se muestra un recuadro en blanco.
+ */
+const hero = {
+  src: "/producciones/hero.mp4",
+  poster: "",
+  title: { es: "Creamos historias en movimiento", en: "We create stories in motion" },
+  hint: { es: "Desliza", en: "Scroll" },
+};
+---
+
+<!-- La altura del contenedor (250vh) es el "recorrido" de scroll: 100vh para crecer y 150vh de margen -->
+<div data-hero class="relative w-full h-[250vh]" style="--p:0">
+  <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden bg-black">
+
+    <!-- Caja del video: su tamaño depende de --p (0 = pequeño, 1 = pantalla completa) -->
+    <div
+      class="relative overflow-hidden bg-[#16262f]"
+      style="
+        --w0: clamp(18rem, 50vw, 40rem);
+        --h0: calc(var(--w0) * 9 / 16);
+        width: calc(var(--w0) + (100vw - var(--w0)) * var(--p));
+        height: calc(var(--h0) + (100vh - var(--h0)) * var(--p));
+        border-radius: calc(0.75rem * (1 - var(--p)));
+      "
+    >
+      {hero.src && (
+        <video
+          data-hero-video
+          src={hero.src}
+          poster={hero.poster || undefined}
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          aria-hidden="true"
+          class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        />
+      )}
+
+      <!-- Sombra de fondo: se oscurece al crecer para que el título resalte -->
+      <div class="absolute inset-0 bg-black" style="opacity: calc(0.25 + 0.35 * var(--p));"></div>
+
+      <!-- Título centrado: su tamaño de letra también crece con el scroll -->
+      <div class="absolute inset-0 flex items-center justify-center px-6 text-center">
+        <p
+          class="w-full max-w-4xl font-display font-bold italic uppercase tracking-wide leading-[0.95] text-white
+                 [text-shadow:0_4px_30px_rgb(0_0_0/0.6)]"
+          style="font-size: calc(clamp(1.25rem, 3.5vw, 2.5rem) + (clamp(2.5rem, 8vw, 8rem) - clamp(1.25rem, 3.5vw, 2.5rem)) * var(--p));"
+          data-es={hero.title.es}
+          data-en={hero.title.en}
+        >
+          {hero.title.es}
+        </p>
+      </div>
+    </div>
+
+    <!-- Indicador de scroll: desaparece al empezar a bajar -->
+    <p
+      class="absolute bottom-6 inset-x-0 text-center text-sm italic font-display tracking-widest uppercase text-white/70 pointer-events-none"
+      style="opacity: calc(1 - var(--p) * 4);"
+      aria-hidden="true"
+    >
+      <span data-es={hero.hint.es} data-en={hero.hint.en}>{hero.hint.es}</span> ↓
+    </p>
+  </div>
+</div>
+
+<script>
+  const hero = document.querySelector<HTMLElement>("[data-hero]");
+
+  if (hero) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion) {
+      // Sin animación: el video queda fijo a pantalla completa, sin recorrido extra de scroll
+      hero.style.height = "100vh";
+      hero.style.setProperty("--p", "1");
+    } else {
+      let ticking = false;
+
+      const update = () => {
+        ticking = false;
+        const scrolled = -hero.getBoundingClientRect().top; // cuánto se ha bajado desde el inicio del bloque
+        const p = Math.min(1, Math.max(0, scrolled / window.innerHeight)); // crece durante el primer 100vh
+        hero.style.setProperty("--p", p.toFixed(4));
+      };
+
+      const onScroll = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      update();
+    }
+
+    // Pausa el video cuando ya no está en pantalla para ahorrar recursos
+    const video = hero.querySelector<HTMLVideoElement>("[data-hero-video]");
+    if (video) {
+      video.muted = true;
+      new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      }).observe(hero);
+    }
+  }
+</script>
