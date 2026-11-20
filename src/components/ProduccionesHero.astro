@@ -1,11 +1,6 @@
 ---
 /**
  * Video de apertura de la sección Producciones.
- * Empieza en tamaño pequeño-mediano y crece con el scroll hasta cubrir toda la pantalla.
- *  - src: ruta del video en /public (ej. "/producciones/hero.mp4"). Siempre en silencio.
- *  - poster: imagen que se ve mientras carga el video (opcional)
- *  - title: texto que aparece en el centro
- * Mientras "src" esté vacío se muestra un recuadro en blanco.
  */
 const hero = {
   src: "/producciones/hero.mp4",
@@ -15,11 +10,10 @@ const hero = {
 };
 ---
 
-<!-- La altura del contenedor (250vh) es el "recorrido" de scroll: 100vh para crecer y 150vh de margen -->
 <div data-hero class="relative w-full h-[250vh]" style="--p:0">
   <div class="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden bg-black">
 
-    <!-- Caja del video: su tamaño depende de --p (0 = pequeño, 1 = pantalla completa) -->
+    
     <div
       class="relative overflow-hidden bg-[#16262f]"
       style="
@@ -45,10 +39,8 @@ const hero = {
         />
       )}
 
-      <!-- Sombra de fondo: se oscurece al crecer para que el título resalte -->
       <div class="absolute inset-0 bg-black" style="opacity: calc(0.25 + 0.35 * var(--p));"></div>
 
-      <!-- Título centrado: su tamaño de letra también crece con el scroll -->
       <div class="absolute inset-0 flex items-center justify-center px-6 text-center">
         <p
           class="w-full max-w-4xl font-display font-bold italic uppercase tracking-wide leading-[0.95] text-white
@@ -62,7 +54,6 @@ const hero = {
       </div>
     </div>
 
-    <!-- Indicador de scroll: desaparece al empezar a bajar -->
     <p
       class="absolute bottom-6 inset-x-0 text-center text-sm italic font-display tracking-widest uppercase text-white/70 pointer-events-none"
       style="opacity: calc(1 - var(--p) * 4);"
